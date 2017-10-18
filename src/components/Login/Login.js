@@ -4,8 +4,30 @@ import {Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
 class Login extends React.Component {
 
     constructor(props) {
-        super(props);
-    }
+		super(props);
+
+		this.state = {
+			form: 'Init',
+			button: 'Init',
+			login: {
+				username: '',
+				password: ''
+			}
+		};
+
+	}
+
+	handleChange = (propertyName, event) => {
+		const login = this.state.login;
+		login[propertyName] = event.target.value;
+		this.setState({login: login});
+
+	}
+
+	handleSubmit = (event) => {
+		alert('A name was submitted: ' + this.state.form);
+		event.preventDefault();
+	}
 
     render() {
         return (
@@ -31,13 +53,15 @@ class Login extends React.Component {
                 <Header as='h2' color='teal' textAlign='center'>
                   {' '}Log-in to your account
                 </Header>
-                <Form size='large'>
+                <Form onSubmit={this.handleSubmit.bind(this)} size='large'>
                   <Segment stacked>
                     <Form.Input
                       fluid
                       icon='user'
                       iconPosition='left'
                       placeholder='E-mail address'
+					  onChange={this.handleChange.bind(this, 'username')}
+					  value={this.state.login.username}
                     />
                     <Form.Input
                       fluid
@@ -45,9 +69,10 @@ class Login extends React.Component {
                       iconPosition='left'
                       placeholder='Password'
                       type='password'
+					  onChange={this.handleChange.bind(this, 'password')}
                     />
         
-                    <Button color='teal' fluid size='large'>Login</Button>
+                    <Button color='teal' fluid size='large' type='submit'>Login</Button>
                   </Segment>
                 </Form>
                 <Message>

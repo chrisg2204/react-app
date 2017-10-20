@@ -1,4 +1,5 @@
 import React from 'react';
+import {reactLocalStorage} from 'reactjs-localstorage';
 import {Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
 
 class Login extends React.Component {
@@ -8,7 +9,11 @@ class Login extends React.Component {
 
 		this.state = {
 			form: 'Init',
-			button: 'Init',
+            button: 'Init',
+            message: {
+                hidden: true,
+                content: ''
+            },
 			login: {
 				username: '',
 				password: ''
@@ -25,11 +30,52 @@ class Login extends React.Component {
 	}
 
 	handleSubmit = (event) => {
-		alert('A name was submitted: ' + this.state.form);
+        let self = this,
+            encodedForm = [];
+
+        for (let i in self.state.login) {
+            let encodedKey = encodeURIComponent(i);
+            let encodedValue = encodeURIComponent(self.state.login[i]);
+            encodedForm.push(encodedKey + "=" + encodedValue);
+        }
+
+        encodedForm = encodedForm.join("&");
+        
+        fetch('http://127.0.0.1:1337/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+            body: encodedForm
+        })
+        .then(data => { return data.json();})
+        .then(self.onSuccessFetch.bind(self)) 
+        .catch(self.onErrorFetch.bind(self));
+
 		event.preventDefault();
-	}
+    }
+    
+    onSuccessFetch = (jsonResponse) => {
+        if (jsonResponse.code === 200) {
+            reactLocalStorage.setObject('session', {'data': jsonResponse.data, 'active': true});
+        } else if (jsonResponse.code === 400) {
+            this.setState({ message: {hidden: false } });
+            this.setState({ message: {content: jsonResponse.error } });
+        } else {
+            return false;
+        }
+    }
+
+    onErrorFetch = (error) => {
+        console.log('ok');
+        // console.log(error);
+    }
+
+    handleDismiss = () => {
+        this.setState({ message: {hidden: true } });
+
+      }
 
     render() {
+        
         return (
             <div className='login-form'>
             {/*
@@ -50,6 +96,12 @@ class Login extends React.Component {
               verticalAlign='middle'
             >
               <Grid.Column style={{ maxWidth: 450 }}>
+                <Message warning
+                    hidden={this.state.message.hidden}
+                    onDismiss={this.handleDismiss}
+                    header='Warning!'
+                    content={this.state.message.content}
+                />
                 <Header as='h2' color='teal' textAlign='center'>
                   {' '}Log-in to your account
                 </Header>

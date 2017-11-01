@@ -1,7 +1,8 @@
 import React from 'react';
 import {reactLocalStorage} from 'reactjs-localstorage';
 import {Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
-import { Link, Route, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import axios from 'axios';
 
 class Login extends React.Component {
 
@@ -41,40 +42,29 @@ class Login extends React.Component {
         }
 
         encodedForm = encodedForm.join("&");
-        
-        fetch('http://127.0.0.1:1337/login', {
+
+        axios({
             method: 'POST',
+            url: 'http://127.0.0.1:1337/login',
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
-            body: encodedForm
+            data: encodedForm
         })
-        .then(data => { return data.json();})
-        .then(self.onSuccessFetch.bind(self)) 
-        .catch(self.onErrorFetch.bind(self));
+        .then(response => {
+            reactLocalStorage.setObject('session', {data: response.data.data});
+            this.props.history.push('/main');
+        })
+        .catch(err => {
+            this.setState({ message: {hidden: false } });
+            this.setState({ message: {content: err.response.data.error } });
+        });
 
 		event.preventDefault();
     }
     
-    onSuccessFetch = (jsonResponse) => {
-        if (jsonResponse.code === 200) {
-            reactLocalStorage.setObject('session', {'data': jsonResponse.data, 'active': true});
-            this.props.history.push('/main');
-        } else if (jsonResponse.code === 400) {
-            this.setState({ message: {hidden: false } });
-            this.setState({ message: {content: jsonResponse.error } });
-        } else {
-            return false;
-        }
-    }
-
-    onErrorFetch = (error) => {
-        console.log('ok');
-        // console.log(error);
-    }
-
     handleDismiss = () => {
         this.setState({ message: {hidden: true } });
-
-      }
+    
+    }
 
     render() {
         

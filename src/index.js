@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
 // Custom Component
 import App from './App';
-import {Login} from './components/Login';
 import {Main} from './components/Main';
 
 ReactDOM.render(

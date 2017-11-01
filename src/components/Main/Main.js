@@ -1,7 +1,7 @@
 import React from 'react';
-import { Container, Dropdown, Header, Menu, Icon, Button } from 'semantic-ui-react';
+import { Container, Dropdown, Header, Menu, Icon } from 'semantic-ui-react';
 import { reactLocalStorage } from 'reactjs-localstorage';
-import { Link, Route, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 class Main extends React.Component {
     
@@ -39,7 +39,7 @@ class Main extends React.Component {
     }
 
     render() {
-        const { username, firstname, lastname } = this.state.userData;
+        const { firstname, lastname } = this.state.userData;
         const fullName = firstname +' '+ lastname;
         const trigger = (
             <span>

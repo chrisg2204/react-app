@@ -1,15 +1,61 @@
 import React from 'react';
-import {Container, Divider, Dropdown, Grid, Header, Image, List, Menu, Segment} from 'semantic-ui-react'
+import { Container, Dropdown, Header, Menu, Icon, Button } from 'semantic-ui-react';
+import { reactLocalStorage } from 'reactjs-localstorage';
 import { Link, Route, withRouter } from 'react-router-dom';
 
 class Main extends React.Component {
     
     constructor(props) {
         super(props);
+        this.state = {
+            userData : {},
+            itemSelected: '',
+            sessionActive: ''
+        };
+
+    }
+
+    componentDidMount() {
+        const savedSession = (reactLocalStorage.get('session') !== undefined) ? JSON.parse(reactLocalStorage.get('session')) : '';
+        if (savedSession !== '') {
+            this.setState({ userData : savedSession.data });
+        }
+
+    }
     
+    handleChangeDropdown = (e, data) => {
+        const self = this;
+        const { value } = data;
+        this.setState({ itemSelected : data.value });
+
+        if (value === 'sign-out') {
+            self.logout();
+        }
+    }
+
+    logout = () => {
+        reactLocalStorage.clear();
+        this.props.history.push('/');
     }
 
     render() {
+        const { username, firstname, lastname } = this.state.userData;
+        const fullName = firstname +' '+ lastname;
+        const trigger = (
+            <span>
+                <Icon name='user' /> { fullName }
+            </span>
+        );
+        const options = [
+            { value: 'profile', text: 'Your Profile' },
+            { value: 'stars', text: 'Your Stars' },
+            { value: 'explore', text: 'Explore' },
+            { value: 'integrations', text: 'Integrations' },
+            { value: 'help', text: 'Help' },
+            { value: 'settings', text: 'Settings' },
+            { value: 'sign-out', text: 'Sign Out' },
+          ];
+
         return (
             <div>
             <Menu fixed='top' inverted>
@@ -19,23 +65,15 @@ class Main extends React.Component {
                 </Menu.Item>
                 <Menu.Item as='a'>Home</Menu.Item>
         
-                <Dropdown item simple text='Dropdown'>
-                  <Dropdown.Menu>
-                    <Dropdown.Item>List Item</Dropdown.Item>
-                    <Dropdown.Item>List Item</Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Header>Header Item</Dropdown.Header>
-                    <Dropdown.Item>
-                      <i className='dropdown icon' />
-                      <span className='text'>Submenu</span>
-                      <Dropdown.Menu>
-                        <Dropdown.Item>List Item</Dropdown.Item>
-                        <Dropdown.Item>List Item</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown.Item>
-                    <Dropdown.Item>List Item</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
+                <Menu.Menu position='right'>    
+                    <Dropdown
+                        onChange={this.handleChangeDropdown.bind(this)}
+                        item
+                        simple
+                        trigger={trigger}
+                        options={options}
+                    />
+                </Menu.Menu>
               </Container>
             </Menu>
         

@@ -1,6 +1,7 @@
 import React from 'react';
 import {reactLocalStorage} from 'reactjs-localstorage';
 import {Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
+import { Link, Route, withRouter } from 'react-router-dom';
 
 class Login extends React.Component {
 
@@ -56,6 +57,7 @@ class Login extends React.Component {
     onSuccessFetch = (jsonResponse) => {
         if (jsonResponse.code === 200) {
             reactLocalStorage.setObject('session', {'data': jsonResponse.data, 'active': true});
+            this.props.history.push('/main');
         } else if (jsonResponse.code === 400) {
             this.setState({ message: {hidden: false } });
             this.setState({ message: {content: jsonResponse.error } });
@@ -138,4 +140,4 @@ class Login extends React.Component {
 
 }
 
-export default Login;
+export default withRouter(Login);

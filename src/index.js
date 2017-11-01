@@ -1,9 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
 import 'semantic-ui-css/semantic.min.css';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import registerServiceWorker from './registerServiceWorker';
+// Custom Component
+import App from './App';
+import {Login} from './components/Login';
+import {Main} from './components/Main';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+    <BrowserRouter>
+        <div>       
+            <Switch>
+                <Route exact path='/' component={App} />
+                <Route exact path='/main' component={Main} />               
+            </Switch>
+        </div>
+    </BrowserRouter>, document.getElementById('root'));
 registerServiceWorker();

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {reactLocalStorage} from 'reactjs-localstorage';
-import {BrowserRouter as Router, Route, Link, Redirect, withRouter} from 'react-router-dom';
+// Custom Component.
 import {Login} from './components/Login';
 import {Main} from './components/Main';
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Container, Divider, Dropdown, Grid, Header, Image, List, Menu, Segment} from 'semantic-ui-react'
+import { Link, Route, withRouter } from 'react-router-dom';
 
 class Main extends React.Component {
     
@@ -50,4 +51,4 @@ class Main extends React.Component {
     }
 }
 
-export default Main;
+export default withRouter(Main);

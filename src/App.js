@@ -1,45 +1,61 @@
 import React, {Component} from 'react';
 import {reactLocalStorage} from 'reactjs-localstorage';
-// Custom Component.
-import {Login} from './components/Login';
-import {Main} from './components/Main';
+import { withRouter } from 'react-router-dom';
+// Custom Component
+import { Login } from './components/Login';
+import { Main } from './components/Main';
 
 class App extends Component {
     
     constructor(props) {
         super(props);
         this.state = {
-            layout: ''
+            session: ''
         };
     }
     
     componentDidMount() {
-        let savedSession = (reactLocalStorage.get('session') !== undefined) ? reactLocalStorage.get('session') : '';
+        let savedSession = (
+            reactLocalStorage.get('session') !== undefined)
+                ?
+            JSON.parse(reactLocalStorage.get('session')) : '';
+            
         if (savedSession !== '') {
-            this.setState({layout : 'session-active'});
+            this.setState({
+                session : 'session-active'
+            });
+
+            this.props.history.push('/main');
         } else {
-            this.setState({layout : 'session-inactive'});
+            this.setState({
+                session : 'session-inactive'
+            });
         }
     }
     
     render() {
-        if (this.state.layout === 'session-active') {
+        
+        const {
+            session
+        } = this.state;
+        
+        if (session === 'session-active') {
             return (
-            <div className="App">
-                <Main />
-            </div>
-            );
-        } else if (this.state.layout === 'session-inactive') {
+                <div className="App">
+                    <Main />
+                </div>
+                );
+        } else if (session === 'session-inactive') {
             return (
-            <div className="App">
-                <Login />
-            </div>
-            );
+                <div className="App">
+                    <Login />
+                </div>
+                );
         } else {
             return false;
         }
     }
-
+    
 }
 
-export default App;
+export default withRouter(App);

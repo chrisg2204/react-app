@@ -2,7 +2,10 @@ import React from 'react';
 import {reactLocalStorage} from 'reactjs-localstorage';
 import {Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import axios from 'axios'
+// Action
+import LoginActionThunk from '../../redux/actions/LoginAction';
 
 class Login extends React.Component {
 
@@ -63,7 +66,6 @@ class Login extends React.Component {
     
     handleDismiss = () => {
         this.setState({ message: {hidden: true } });
-    
     }
 
     render() {
@@ -130,4 +132,8 @@ class Login extends React.Component {
 
 }
 
-export default withRouter(Login);
+const mapStateToProps = (state) => {
+  return Object.assign({}, state, '');
+};
+
+export default connect(mapStateToProps)(withRouter(Login));

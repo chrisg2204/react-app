@@ -3,13 +3,24 @@ import ReactDOM from 'react-dom';
 import 'semantic-ui-css/semantic.min.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
+// Redux
+import { createStore, applyMiddleware, compose } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import reducer from './redux/reducers';
 // Custom Component
 import App from './App';
 import { Main } from './components/Main';
 import { Login } from './components/Login';
 
+const store = createStore(reducer, compose(
+    applyMiddleware(thunk),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), applyMiddleware(thunk)
+));
+
 ReactDOM.render(
-    <BrowserRouter>
+    <Provider store={store}>
+        <BrowserRouter>
         <div>       
             <Switch>
                 <Route
@@ -26,5 +37,6 @@ ReactDOM.render(
                 />
             </Switch>
         </div>
-    </BrowserRouter>, document.getElementById('root'));
+        </BrowserRouter>
+    </Provider>, document.getElementById('root'));
 registerServiceWorker();

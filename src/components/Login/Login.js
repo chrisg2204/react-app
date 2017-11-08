@@ -4,8 +4,8 @@ import {Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios'
-// Action
-import LoginActionThunk from '../../redux/actions/LoginAction';
+// Actions
+import { LoginActionThunk, MainActionThunk } from '../../redux/actions';
 
 class Login extends React.Component {
 

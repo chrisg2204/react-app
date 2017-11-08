@@ -2,6 +2,9 @@ import React from 'react';
 import { Container, Dropdown, Header, Menu, Icon } from 'semantic-ui-react';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+// Actions
+import { MainActionThunk } from '../../redux/actions';
 // Custom Component
 import { User } from '../User';
 
@@ -29,6 +32,8 @@ class Main extends React.Component {
                 session : 'session-active',
                 userData : savedSession.data
             });
+            this.props.dispatch(MainActionThunk('sessionActive', savedSession.data));
+            this.props.dispatch(MainActionThunk('layoutActive', 'logged'));
         } else {
             this.setState({
                 session : 'session-inactive'
@@ -49,6 +54,7 @@ class Main extends React.Component {
         
         if (value === 'sign-out') {
             self.logout();
+            self.props.dispatch(MainActionThunk('layoutActive', 'not-logged'));
         } else if (value === 'management-users') {
             self.setState({
                 componentActive : 'User'
@@ -138,4 +144,8 @@ class Main extends React.Component {
     }
 }
 
-export default withRouter(Main);
+const mapStateToProps = (state) => {
+    return Object.assign({}, state, '');
+};
+
+export default connect(mapStateToProps)(withRouter(Main));

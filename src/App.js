@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import {reactLocalStorage} from 'reactjs-localstorage';
+import { connect } from 'react-redux';
+// React-Router
 import { withRouter } from 'react-router-dom';
+// Actions
+import { MainActionThunk } from './redux/actions';
 // Custom Component
 import { Login } from './components/Login';
 import { Main } from './components/Main';
@@ -58,4 +62,8 @@ class App extends Component {
     
 }
 
-export default withRouter(App);
+const mapStateToProps = (state) => {
+    return Object.assign({}, state, '');
+};
+
+export default connect(mapStateToProps)(withRouter(App));

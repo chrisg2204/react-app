@@ -3,7 +3,6 @@ const INITIAL_STATE_LOGIN = {
     date : []
 };
 
-
 const LoginReducer = (state = INITIAL_STATE_LOGIN, action) => {
     switch(action.type) {
         case 'LOGIN_ON' : {
